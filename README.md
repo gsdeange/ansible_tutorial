@@ -10,3 +10,10 @@ https://www.youtube.com/watch?v=3RiVKs8GHYQ&list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4
 
 SSH Keys - Secure the connection into servers from devices. Tutorial uses command:
     - "ssh-keygen -t ed25519 -C /"user default/""
+
+
+Network Topology: 
+	workstation : 192.168.60.10
+	server-1 : 192.168.60.11
+	server-2 : 192.168.60.12
+	server-3 : 192.168.60.13
