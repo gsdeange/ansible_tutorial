@@ -17,3 +17,8 @@ Network Topology:
 	server-1 : 192.168.60.11
 	server-2 : 192.168.60.12
 	server-3 : 192.168.60.13
+
+
+Useful commands: 
+
+	- "ansible all -m gather_facts" -> useful for finding info about all of the clients within inventory. You can use "--limit <ip>" to narrow down clients
