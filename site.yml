@@ -17,6 +17,25 @@
         upgrade: yes
     when: ansible_distribution == "Ubuntu"
 
+- hosts: workstations
+  become: true
+  tasks:
+    
+    - name: install unzip
+      package: 
+        name: unzip
+    
+    - name: install terraform
+      unarchive: 
+        src: https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes #this piece is required to let it know that src is not local (it doesn't know even thought it says https above)
+        mode: 0755
+        owner: root
+        group: root
+
+
+
 - hosts: web_servers
   become: true
   tasks:  
@@ -39,6 +58,32 @@
         state: latest
         update_cache: yes
       when: ansible_distribution == "CentOS"
+
+    - name: start httpd (CentOS)
+      tags: apache, centos, httpd
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "CentOS" 
+    
+    #this can change the line in config file within the server-file
+    - name: change e-mail address for admin
+      tags: apache, centos, httpd
+      lineinfile:  
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin' #says we want to edit line with 'ServerAdmin' starting off
+        line: ServerAdmin somebody@somewhere.net #what to replace line with
+      when: ansible_distribution == "CentOS"
+      register: httpd #saves state in variable httpd here
+  
+    #this play will restart httpd service
+    - name: restart httpd (CentOS)
+      tags: apache, centos, httpd
+      service: 
+        name: httpd 
+        state: restarted
+      when: httpd.changed #only restart service when httpd register (as seen above) is changed
 
     - name: copy default html file for site
       tags: apache, apache2, httpd
