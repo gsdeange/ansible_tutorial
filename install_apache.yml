@@ -4,14 +4,33 @@
   become: true
   tasks:
 
-  # "package" below will automatically use the default package manager for the system (Ubuntu -> apt, CentOS -> dnf)
-  - name: install apache and php packages
-    package:
-      name: 
-        - "{{ apache_package }}"
-        - "{{ php_package }}"
+
+  - name: install apache and php for Ubuntu servers
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+  - name: install apache and php for CentOS servers
+    dnf:
+      - httpd
+      - php
       state: latest
       update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+
+  # "package" below will automatically use the default package manager for the system (Ubuntu -> apt, CentOS -> dnf)
+  # - name: install apache and php packages
+  #  package:
+  #    name: 
+  #      - "{{ apache_package }}"
+  #      - "{{ php_package }}"
+  #    state: latest
+  #    update_cache: yes
     
  #here is the added below playbook for CentOS servers
  #CentOS does not use apt -> dnf instead
