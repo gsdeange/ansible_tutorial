@@ -22,3 +22,8 @@ Network Topology:
 Useful commands: 
 
 	- "ansible all -m gather_facts" -> useful for finding info about all of the clients within inventory. You can use "--limit <ip>" to narrow down clients
+
+  - "ansible-playbook --ask-become-pass site.yml" to run basic plays
+
+  - "ansible-playbook --tags ubuntu --ask-become-pass site.yml" to run plays only with specified tags. In this case it will only run plays with tag: Ubuntu
+    For multiple tags: use parentheses: ex: --tags "apache Ubuntu"
